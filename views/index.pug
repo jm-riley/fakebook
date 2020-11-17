@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title= title
+  body
+    h1 welcome to fakebook
+    div
+      div Welcome!
+      each user in users
+        //- div welcome, #{user.username}
+        //- div= user.username
+        div
+          a(href=`/users/${user.id}`) #{user.username}
