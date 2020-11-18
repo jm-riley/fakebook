@@ -1,15 +1,18 @@
-<!DOCTYPE html>
-html(lang="en")
-  head
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title= title
-  body
-    h1 welcome to fakebook
-    div
-      div Welcome!
-      each user in users
-        //- div welcome, #{user.username}
-        //- div= user.username
-        div
-          a(href=`/users/${user.id}`) #{user.username}
+extends layout.pug
+mixin userContent(userId, username)
+  div: a(href=`/users/${userId}`)= username
+  div this is a mixin
+  div
+    div all kinds of stuff for #{username}
+
+block content
+  h1 welcome to fakebook
+
+  div
+    each user in users
+      //- div welcome, #{user.username}
+      //- div= user.username
+      include stuff.pug
+      +userContent(user.id, user.username)
+block sidebar
+  p this is the sidebar
