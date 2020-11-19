@@ -1,4 +1,4 @@
-const { User, Post } = require('./models');
+const { User, Post } = require('../models');
 
 async function getUserAndPosts(id) {
   // lazy loading

@@ -1,4 +1,4 @@
-const { User } = require('./models/index');
+const { User } = require('../models/index');
 
 async function updateUser() {
   const user = await User.create({ username: 'jim', email: 'jim@jim.com' });

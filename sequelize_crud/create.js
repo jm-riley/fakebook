@@ -1,4 +1,4 @@
-const { User, Post } = require('./models');
+const { User, Post } = require('../models');
 
 async function createUser(username, email) {
   // when creating this new user, we have a couple options
