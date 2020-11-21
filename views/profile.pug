@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-html(lang="en")
-  head
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title Document
-  body
-    a(href='/') home
-    h1= user.username
-    each post in user.Posts
-      div= post.body
+extends layout.pug
+block content
+  h1= user.username
+  each post in user.Posts
+    div= post.body

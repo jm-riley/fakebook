@@ -1,13 +1,13 @@
 extends layout.pug
 mixin userContent(userId, username)
-  div: a(href=`/users/${userId}`)= username
-  div this is a mixin
-  div
-    div all kinds of stuff for #{username}
+  div.user-card
+    div: a(href=`/users/${userId}`)= username
+    div this is a mixin
+    div
+      div all kinds of stuff for #{username}
 
 block content
   h1 welcome to fakebook
-
   div
     each user in users
       //- div welcome, #{user.username}

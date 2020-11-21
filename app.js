@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const csrf = require('csurf');
 const cookieParser = require('cookie-parser');
 const postsRouter = require('./routes/posts');
 const usersRouter = require('./routes/users');
@@ -10,8 +9,7 @@ app.set('view engine', 'pug');
 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-
-// const csrfProtection = csrf({ cookie: true });
+app.use(express.static('public'));
 
 function logReqData(req, res, next) {
   console.log('HTTP METHOD:', req.method);
@@ -30,11 +28,6 @@ function addToReq(req, res, next) {
 
 app.use(logReqData);
 app.use(addToReq);
-
-app.get('/create', csrfProtection, bananaHandler, (req, res) => {
-  console.log(req.csrfToken());
-  res.send('form route');
-});
 
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
