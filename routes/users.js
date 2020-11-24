@@ -38,7 +38,7 @@ router.post('/login', csrfProtection, async (req, res) => {
   // use bcrypt to check if valid password
   // since we store the salt we used to originally hash the pw in the db, bcrypt will use that same salt when hashing the password from the form,
   // and then determine if both the result and the hashedPassword in the db are the same
-  const isPassword = await bcrypt.compare(password, user.hashedPassword.toString());
+  const isPassword = await bcrypt.compare(password, user.hashedPassword);
   // bcrypt.compare returns a boolean...if true we know they entered the correct password
   if (isPassword) {
     req.session.user = { id: user.id, username: user.username, email };
@@ -55,7 +55,7 @@ router.get('/:id(\\d+)', async (req, res) => {
 });
 
 router.post('/logout', (req, res) => {
-  req.session.user = null;
+  delete req.session.user;
   res.redirect('/');
 });
 
