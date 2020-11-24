@@ -1,4 +1,4 @@
-const { User } = require('./models');
+const { User } = require('../models');
 
 async function deleteUserByUsername(username) {
   // destroy is both a class and an instance method

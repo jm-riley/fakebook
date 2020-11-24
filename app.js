@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
-const csrf = require('csurf');
 const cookieParser = require('cookie-parser');
 const postsRouter = require('./routes/posts');
+const usersRouter = require('./routes/users');
+const session = require('express-session');
 const { User, Post } = require('./models/index.js');
 
 app.set('view engine', 'pug');
@@ -10,7 +11,14 @@ app.set('view engine', 'pug');
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-const csrfProtection = csrf({ cookie: true });
+app.use(
+  session({
+    secret: 'superSecret',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(express.static('public'));
 
 function logReqData(req, res, next) {
   console.log('HTTP METHOD:', req.method);
@@ -18,46 +26,39 @@ function logReqData(req, res, next) {
   next();
 }
 
+function logSession(req, res, next) {
+  console.log(req.session);
+  next();
+}
+
 function addToReq(req, res, next) {
   if (req.body.username === 'fred') {
-    req.isFred = true;
+    req.likesBananas = true;
   } else {
-    req.isFred = false;
+    req.likesBananas = false;
   }
+  next();
+}
+
+function getCurrentUser(req, res, next) {
+  // only purpose of this middleware is to add current user object to res.locals to make it easy to access in templates
+  res.locals.user = req.session.user;
   next();
 }
 
 app.use(logReqData);
 app.use(addToReq);
+app.use(logSession);
+app.use(getCurrentUser);
 
 app.use('/posts', postsRouter);
+app.use('/users', usersRouter);
 
 app.get('/', async (req, res) => {
   console.log('in the route handler');
   const users = await User.findAll();
   res.render('index', { title: 'Fakebook', users });
   // res.send('<h1>this is our express app</h1>');
-});
-
-app.get('/register', csrfProtection, (req, res) => {
-  console.log(req.csrfToken());
-  res.render('new-user', { csrfToken: req.csrfToken() });
-});
-
-app.post('/users', csrfProtection, async (req, res) => {
-  console.log(req.body);
-  const { username, email } = req.body;
-  const user = await User.create({ username, email });
-  if (req.isFred) {
-    return res.send('fred just registered');
-  }
-  res.redirect('/');
-});
-
-app.get('/users/:id(\\d+)', async (req, res) => {
-  const id = req.params.id;
-  const user = await User.findByPk(id, { include: Post });
-  res.render('profile', { user });
 });
 
 app.get('/test', (req, res) => {
