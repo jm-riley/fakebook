@@ -3,17 +3,31 @@ const app = express();
 const cookieParser = require('cookie-parser');
 const postsRouter = require('./routes/posts');
 const usersRouter = require('./routes/users');
+const session = require('express-session');
 const { User, Post } = require('./models/index.js');
 
 app.set('view engine', 'pug');
 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(
+  session({
+    secret: 'superSecret',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 app.use(express.static('public'));
 
 function logReqData(req, res, next) {
   console.log('HTTP METHOD:', req.method);
   console.log('PATH:', req.path);
+  next();
+}
+
+function logSession(req, res, next) {
+  console.log(req.session);
   next();
 }
 
@@ -26,8 +40,16 @@ function addToReq(req, res, next) {
   next();
 }
 
+function getCurrentUser(req, res, next) {
+  // only purpose of this middleware is to add current user object to res.locals to make it easy to access in templates
+  res.locals.user = req.session.user;
+  next();
+}
+
 app.use(logReqData);
 app.use(addToReq);
+app.use(logSession);
+app.use(getCurrentUser);
 
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);

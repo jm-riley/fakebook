@@ -7,7 +7,9 @@ mixin userContent(userId, username)
       div all kinds of stuff for #{username}
 
 block content
-  h1 welcome to fakebook
+  if user
+   p welcome, #{user.username}
+  h1 fakebook
   div
     each user in users
       //- div welcome, #{user.username}

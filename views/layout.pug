@@ -8,7 +8,13 @@ html(lang="en")
   body
     nav
       a(href='/') home
-  
+      div
+        if user
+          form(method='post' action='/users/logout')
+            button(type="submit") logout
+        else
+          a(href='/users/register') signup   
+          a(href='/users/login') login
     block content
     
     block sidebar

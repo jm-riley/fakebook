@@ -1,7 +1,9 @@
 'use strict';
 
+const bcrypt = require('bcryptjs');
+
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: async (queryInterface, Sequelize) => {
     /*
       Add altering commands here.
       Return a promise to correctly handle asynchronicity.
@@ -13,10 +15,34 @@ module.exports = {
       }], {});
     */
     return queryInterface.bulkInsert('Users', [
-      { username: 'joe', email: 'joe@joe.com', updatedAt: new Date(), createdAt: new Date() },
-      { username: 'jesse', email: 'jesse@joe.com', updatedAt: new Date(), createdAt: new Date() },
-      { username: 'mitchell', email: 'mitchell@joe.com', updatedAt: new Date(), createdAt: new Date() },
-      { username: 'chris', email: 'chris@joe.com', updatedAt: new Date(), createdAt: new Date() },
+      {
+        username: 'joe',
+        email: 'joe@joe.com',
+        hashedPassword: await bcrypt.hash('password', 10),
+        updatedAt: new Date(),
+        createdAt: new Date(),
+      },
+      {
+        username: 'jesse',
+        email: 'jesse@joe.com',
+        hashedPassword: await bcrypt.hash('password', 10),
+        updatedAt: new Date(),
+        createdAt: new Date(),
+      },
+      {
+        username: 'mitchell',
+        email: 'mitchell@joe.com',
+        hashedPassword: await bcrypt.hash('password', 10),
+        updatedAt: new Date(),
+        createdAt: new Date(),
+      },
+      {
+        username: 'chris',
+        email: 'chris@joe.com',
+        hashedPassword: await bcrypt.hash('password', 10),
+        updatedAt: new Date(),
+        createdAt: new Date(),
+      },
     ]);
   },
 
