@@ -3,6 +3,8 @@ const app = express();
 const cookieParser = require('cookie-parser');
 const postsRouter = require('./routes/posts');
 const usersRouter = require('./routes/users');
+const postsApiRouter = require('./api/posts-api')
+const usersApiRouter = require('./api/users-api')
 const session = require('express-session');
 const { User, Post } = require('./models/index.js');
 
@@ -53,6 +55,9 @@ app.use(getCurrentUser);
 
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
+app.use('/api', postsApiRouter);
+app.use('/api', usersApiRouter);
+
 
 app.get('/', async (req, res) => {
   console.log('in the route handler');
